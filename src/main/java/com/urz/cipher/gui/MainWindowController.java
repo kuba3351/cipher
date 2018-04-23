@@ -30,7 +30,7 @@ public class MainWindowController implements Initializable {
 
     public void onDecryptButtonClick() throws IOException {
         Cipher selectedCipher = cipher.getValue();
-        if(!selectedCipher.isKeyValid(encryptionKey.getText())) {
+        if (!selectedCipher.isKeyValid(encryptionKey.getText())) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Cipher");
             alert.setHeaderText("Błąd deszyfrowania!");
@@ -38,14 +38,23 @@ public class MainWindowController implements Initializable {
             alert.show();
             return;
         }
-        String preparedText = selectedCipher.prepareText(encryptedText.getText());
-        String decrypted = selectedCipher.decrypt(encryptionKey.getText(), preparedText);
+        if (!selectedCipher.isTextValid(encryptedText.getText())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Cipher");
+            alert.setHeaderText("Błąd deszyfrowania!");
+            alert.setContentText("Coś jest nie tak z zaszyfrowanym tekstem!");
+            alert.show();
+            return;
+        }
+        String preparedText = selectedCipher.prepareText(encryptionKey.getText(), encryptedText.getText());
+        String preparedKey = selectedCipher.prepareKey(encryptionKey.getText());
+        String decrypted = selectedCipher.decrypt(preparedKey, preparedText);
         textToEncrypt.setText(decrypted);
     }
 
     public void onEncryptButtonClick() {
         Cipher selectedCipher = cipher.getValue();
-        if(!selectedCipher.isKeyValid(encryptionKey.getText())) {
+        if (!selectedCipher.isKeyValid(encryptionKey.getText())) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Cipher");
             alert.setHeaderText("Błąd szyfrowania!");
@@ -53,8 +62,17 @@ public class MainWindowController implements Initializable {
             alert.show();
             return;
         }
-        String preparedText = selectedCipher.prepareText(textToEncrypt.getText());
-        String encrypted = selectedCipher.encrypt(encryptionKey.getText(), preparedText);
+        if (!selectedCipher.isTextValid(textToEncrypt.getText())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Cipher");
+            alert.setHeaderText("Błąd szyfrowania!");
+            alert.setContentText("Coś jest nie tak z szyfrogramem!");
+            alert.show();
+            return;
+        }
+        String preparedText = selectedCipher.prepareText(encryptionKey.getText(), textToEncrypt.getText());
+        String preparedKey = selectedCipher.prepareKey(encryptionKey.getText());
+        String encrypted = selectedCipher.encrypt(preparedKey, preparedText);
         encryptedText.setText(encrypted);
     }
 
