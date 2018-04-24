@@ -58,7 +58,7 @@ public class Hill extends Cipher {
     }
 
     @Override
-    public String prepareKey(String key) {
+    public String prepareKey(String key, String text) {
         return key.toLowerCase();
     }
 
@@ -156,12 +156,6 @@ public class Hill extends Cipher {
             if ((i * number) % 26 == 1)
                 return Optional.of(i);
         return Optional.empty();
-    }
-
-    private int modulo(int i, int j) {
-        if (i > 0) return i % j;
-        if (i < 0) return j - Math.abs(i % j);
-        return 0;
     }
 
     @Override

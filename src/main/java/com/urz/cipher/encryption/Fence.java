@@ -79,7 +79,7 @@ public class Fence extends Cipher {
     }
 
     @Override
-    public String prepareKey(String key) {
+    public String prepareKey(String key, String text) {
         return key;
     }
 

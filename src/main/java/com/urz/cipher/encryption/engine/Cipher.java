@@ -61,5 +61,11 @@ public abstract class Cipher {
         return true;
     }
 
-    public abstract String prepareKey(String key);
+    public abstract String prepareKey(String key, String text);
+
+    protected int modulo(int i, int j) {
+        if (i > 0) return i % j;
+        if (i < 0) return j - Math.abs(i % j);
+        return 0;
+    }
 }

@@ -44,11 +44,11 @@ public class Playfair extends Cipher {
     private List<Integer> findOpposite(Map<String, Integer> first, Map<String, Integer> second, List<List<Integer>> table, int i) {
         List<Integer> result = new ArrayList<>();
         if (first.get("row").equals(second.get("row"))) {
-            result.add((table.get(first.get("row")).get((first.get("column") + i) % 5)));
-            result.add((table.get(first.get("row")).get((second.get("column") + i) % 5)));
+            result.add((table.get(first.get("row")).get((modulo(first.get("column") + i, 5)))));
+            result.add((table.get(first.get("row")).get((modulo(second.get("column") + i, 5)))));
         } else if (first.get("column").equals(second.get("column"))) {
-            result.add((table.get((first.get("row") + i) % 5).get(first.get("column"))));
-            result.add(table.get((second.get("row") + i) % 5).get(first.get("column")));
+            result.add((table.get((modulo(first.get("row") + i, 5))).get(first.get("column"))));
+            result.add(table.get((modulo(second.get("row") + i, 5))).get(first.get("column")));
         } else {
             result.add((table.get(first.get("row")).get(second.get("column"))));
             result.add(table.get(second.get("row")).get(first.get("column")));
@@ -86,7 +86,7 @@ public class Playfair extends Cipher {
     }
 
     @Override
-    public String prepareKey(String key) {
+    public String prepareKey(String key, String text) {
         List<Character> chars = new ArrayList<>();
         for (char character : key.toCharArray())
             chars.add(character);
@@ -109,7 +109,7 @@ public class Playfair extends Cipher {
             char c1 = text.charAt(i);
             char c2 = text.charAt(i + 1);
             if (c1 == c2)
-                preparedText = preparedText.substring(0, i) + preparedText.substring(i + 1, preparedText.length());
+                preparedText = preparedText.substring(0, i) + "x" + preparedText.substring(i + 1, preparedText.length());
         }
         return preparedText;
     }

@@ -47,7 +47,7 @@ public class MainWindowController implements Initializable {
             return;
         }
         String preparedText = selectedCipher.prepareText(encryptionKey.getText(), encryptedText.getText());
-        String preparedKey = selectedCipher.prepareKey(encryptionKey.getText());
+        String preparedKey = selectedCipher.prepareKey(encryptionKey.getText(), encryptedText.getText());
         String decrypted = selectedCipher.decrypt(preparedKey, preparedText);
         textToEncrypt.setText(decrypted);
     }
@@ -71,7 +71,7 @@ public class MainWindowController implements Initializable {
             return;
         }
         String preparedText = selectedCipher.prepareText(encryptionKey.getText(), textToEncrypt.getText());
-        String preparedKey = selectedCipher.prepareKey(encryptionKey.getText());
+        String preparedKey = selectedCipher.prepareKey(encryptionKey.getText(), textToEncrypt.getText());
         String encrypted = selectedCipher.encrypt(preparedKey, preparedText);
         encryptedText.setText(encrypted);
     }
