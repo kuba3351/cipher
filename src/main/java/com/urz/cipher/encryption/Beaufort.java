@@ -6,7 +6,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vigenere extends Cipher {
+public class Beaufort extends Cipher{
+
+    private String runCipher(String key, String text) {
+        List<List<Character>> table = generateTable();
+        return processText(key, text, table);
+    }
+
+    private String processText(String key, String text, List<List<Character>> table) {
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0;i<text.length();i++) {
+            char keyChar = key.charAt(i % key.length());
+            char textChar = text.charAt(i);
+            int column = table.get(0).indexOf(keyChar);
+            int row = table.stream().filter(elem -> elem.get(0).equals(textChar)).map(table::indexOf).findFirst().get();
+            while(row > 0) {
+                row--;
+                column = modulo(column - 1, 26);
+            }
+            char newCharacter = table.get(column).get(row);
+            builder.append(newCharacter);
+        }
+        return builder.toString();
+    }
 
     private List<List<Character>> generateTable() {
         List<List<Character>> table = new ArrayList<>();
@@ -19,32 +41,14 @@ public class Vigenere extends Cipher {
         return table;
     }
 
-    private String processText(String key, String text, List<List<Character>> table) {
-        StringBuilder builder = new StringBuilder();
-        for(int i = 0;i<text.length();i++) {
-            char keyChar = key.charAt(i % key.length());
-            char textChar = text.charAt(i);
-            int column = table.get(0).indexOf(keyChar);
-            int row = table.stream().filter(elem -> elem.get(0).equals(textChar)).map(table::indexOf).findFirst().get();
-            char newCharacter = table.get(column).get(row);
-            builder.append(newCharacter);
-        }
-        return builder.toString();
-    }
-
     @Override
     public String encrypt(String key, String text) {
-        List<List<Character>> table = generateTable();
-        return processText(key, text, table);
+        return runCipher(key, text);
     }
 
     @Override
     public String decrypt(String key, String text) throws IOException {
-        List<List<Character>> table = generateTable();
-        StringBuilder newKey = new StringBuilder();
-        for(char c : key.toCharArray())
-            newKey.append(alphabetLoverCase.get((26 - alphabetLoverCase.indexOf(c)) % 26));
-        return processText(newKey.toString(), text, table);
+        return runCipher(key, text);
     }
 
     @Override
@@ -73,6 +77,6 @@ public class Vigenere extends Cipher {
 
     @Override
     public String toString() {
-        return "szyfr Vigenere'a";
+        return "szyfr Beauforte'a";
     }
 }

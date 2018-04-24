@@ -7,6 +7,6 @@ import java.util.List;
 
 public class CipherList {
     public static List<Cipher> getCipherList() {
-        return Arrays.asList(new Caesar(), new Fence(), new Hill(), new Playfair(), new Vigenere());
+        return Arrays.asList(new Caesar(), new Fence(), new Hill(), new Playfair(), new Vigenere(), new Beaufort(), new Beaufort2());
     }
 }
